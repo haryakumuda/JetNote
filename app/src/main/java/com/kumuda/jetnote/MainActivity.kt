@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -19,10 +20,12 @@ import com.kumuda.jetnote.model.Note
 import com.kumuda.jetnote.screen.NoteScreen
 import com.kumuda.jetnote.screen.NoteViewModel
 import com.kumuda.jetnote.ui.theme.JetNoteTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @ExperimentalMaterial3Api
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,6 +36,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val noteViewModel: NoteViewModel by viewModels()
+//                    val noteViewModel = viewModel<NoteViewModel>() // also works
                     NotesApp(noteViewModel = noteViewModel)
 
 
@@ -45,8 +49,8 @@ class MainActivity : ComponentActivity() {
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
-fun NotesApp(noteViewModel: NoteViewModel = viewModel()){
-    val notesList = noteViewModel.getAllNotes()
+fun NotesApp(noteViewModel: NoteViewModel){
+    val notesList = noteViewModel.noteList.collectAsState().value
 
     NoteScreen(notes = notesList,
         onRemove = {noteViewModel.removeNote(it)},

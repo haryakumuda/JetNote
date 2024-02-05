@@ -38,6 +38,7 @@ import com.kumuda.jetnote.components.NoteButton
 import com.kumuda.jetnote.components.NoteInputText
 import com.kumuda.jetnote.data.NotesDataSource
 import com.kumuda.jetnote.model.Note
+import com.kumuda.jetnote.util.formatDate
 import java.time.format.DateTimeFormatter
 
 @ExperimentalComposeUiApi
@@ -132,7 +133,7 @@ fun NoteRow(
 
             Text(text = note.description, style = MaterialTheme.typography.labelMedium)
             Text(
-                text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d MMM")),
+                text = formatDate(note.entryDate.time),
                 style = MaterialTheme.typography.bodySmall
             )
         }
